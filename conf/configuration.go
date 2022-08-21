@@ -1,13 +1,14 @@
 package conf
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"time"
 )
 
-//Configuration add constant needed
+// Configuration add constant needed
 type Configuration struct {
 	DiscordToken string
 	BotID        string
@@ -60,4 +61,5 @@ func init() {
 			},
 		},
 	}
+	fmt.Println(DiscordConfiguration)
 }

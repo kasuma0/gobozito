@@ -1,6 +1,16 @@
 package handler
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/kasuma0/gobozito/controller"
+	"github.com/kasuma0/gobozito/model"
+	"github.com/sirupsen/logrus"
+)
 
 func DiscordHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself
@@ -8,13 +18,35 @@ func DiscordHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	// If the message is "ping" reply with "Pong!"
-	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "Pong!")
+	command := strings.Split(m.Content, " ")
+	if command[0] != "g=" {
+		return
 	}
+	switch command[1] {
+	case "birthday":
+		switch command[2] {
+		case "add":
+			fmt.Println(m.ID)
+			birthdate, err := time.Parse("2006/01/02", command[3])
+			if err != nil {
+				s.ChannelMessageSend(m.ChannelID, "ingrese fecha en formato 2006/01/02")
+				return
+			}
+			birthObj := model.BirthayADD{
+				UserID:    m.Author.ID,
+				Name:      m.Author.Username,
+				Birthdate: int(birthdate.Unix()),
+				Birthday:  birthdate.Format("01/02"),
+			}
 
-	// If the message is "pong" reply with "Ping!"
-	if m.Content == "pong" {
-		s.ChannelMessageSend(m.ChannelID, "Ping!")
+			err = controller.BirthdayADD(context.Background(), birthObj)
+			if err != nil {
+				logrus.Error(err)
+			}
+
+		}
+	default:
+		return
+
 	}
 }
