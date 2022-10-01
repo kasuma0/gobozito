@@ -6,9 +6,9 @@ import (
 	"net/http"
 )
 
-//HttpCustomClient a custom http client,
+// HttpCustomClient a custom http client,
 func HttpCustomClient(ctx context.Context, request *http.Request) (response []byte, statusCode int, err error) {
-	httpClient := http.Client{}
+	httpClient := http.Client{Transport: &http.Transport{DisableKeepAlives: true}}
 	httpResp, err := httpClient.Do(request.WithContext(ctx))
 	if err != nil {
 		return nil, httpResp.StatusCode, err

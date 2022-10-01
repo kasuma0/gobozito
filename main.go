@@ -2,13 +2,12 @@ package main
 
 import (
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/gin-gonic/gin"
 	"github.com/kasuma0/gobozito/conf"
 	"github.com/kasuma0/gobozito/handler"
+	"github.com/kasuma0/gobozito/routes"
 )
 
 func main() {
@@ -18,8 +17,9 @@ func main() {
 	}
 	discord.AddHandler(handler.DiscordHandler)
 	discord.Open()
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
-	<-sc
-	discord.Close()
+	defer discord.Close()
+	gin.ForceConsoleColor()
+	engine := gin.Default()
+	routes.Routes(engine)
+	engine.Run(":8080")
 }
