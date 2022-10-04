@@ -1,17 +1,19 @@
 package conf
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"time"
 )
 
-//Configuration add constant needed
+// Configuration add constant needed
 type Configuration struct {
-	DiscordToken string
-	BotID        string
-	Credentials  struct {
+	DiscordToken  string
+	BotID         string
+	DiscordApiURL string
+	Credentials   struct {
 		MongoDB struct {
 			URL             string
 			MaxPoolSize     uint64
@@ -37,8 +39,9 @@ func init() {
 		log.Fatal(err)
 	}
 	DiscordConfiguration = Configuration{
-		DiscordToken: os.Getenv("TOKEN"),
-		BotID:        os.Getenv("BOTID"),
+		DiscordToken:  os.Getenv("TOKEN"),
+		BotID:         os.Getenv("BOTID"),
+		DiscordApiURL: fmt.Sprintf("https://discord.com/api/v%s", os.Getenv("DISCORDVERSION")),
 		Credentials: struct {
 			MongoDB struct {
 				URL             string
