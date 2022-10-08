@@ -62,7 +62,7 @@ func createCommandGobozito(ctx context.Context) error {
 		Options: []model.DiscordCommandOptions{{
 			Name:        "birthday",
 			Description: "birthday option, saves your birthday",
-			Type:        3,
+			Type:        1,
 			Required:    false,
 			Choices: []model.DiscordCommandOptionsChoices{{
 				Name:  "add",
@@ -70,16 +70,19 @@ func createCommandGobozito(ctx context.Context) error {
 			}},
 		}},
 	}
-	return CreateCommand(ctx, &commandRequest)
+	return CreateAndUpdateCommand(ctx, http.MethodPost, &commandRequest)
 }
 
-func CreateCommand(ctx context.Context, command *model.DiscordCommand) error {
+// CreateAndUpdateCommand create discord command or update discord command
+//
+//	urlMethod: accept method POST(create command) Patch(update command)
+func CreateAndUpdateCommand(ctx context.Context, urlMethod string, command *model.DiscordCommand) error {
 	bytesRequest, err := json.Marshal(command)
 	if err != nil {
 		logrus.Error(err)
 		return err
 	}
-	commandRequest, err := http.NewRequest(http.MethodPost, commandURL, bytes.NewReader(bytesRequest))
+	commandRequest, err := http.NewRequest(urlMethod, commandURL, bytes.NewReader(bytesRequest))
 	if err != nil {
 		logrus.Error(err)
 		return err

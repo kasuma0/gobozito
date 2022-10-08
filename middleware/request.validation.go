@@ -54,5 +54,4 @@ func verifySignature(ctx *gin.Context) bool {
 		return false
 	}
 	return ed25519.Verify(publicKey, msg.Bytes(), signature)
-
 }
