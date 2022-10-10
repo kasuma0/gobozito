@@ -9,8 +9,6 @@ import (
 	"os/signal"
 )
 
-//var wg sync.WaitGroup
-
 func main() {
 	signalChannel := make(chan os.Signal, 2)
 	go startDiscordEngine(signalChannel)

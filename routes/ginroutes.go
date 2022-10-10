@@ -19,7 +19,7 @@ func ManagementRoutes(engine *gin.Engine) {
 		{
 			command.POST("", api.CreateAndUpdateCommandHandler)
 			command.GET("", api.GetCommands)
-			command.DELETE("", api.DeleteComandHandler)
+			command.DELETE("", api.DeleteCommandHandler)
 			command.PATCH("", api.CreateAndUpdateCommandHandler)
 		}
 		login := management.Group("/login")

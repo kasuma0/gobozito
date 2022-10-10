@@ -44,7 +44,7 @@ func GetCommands(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-func DeleteComandHandler(ctx *gin.Context) {
+func DeleteCommandHandler(ctx *gin.Context) {
 	var request model.DeleteCommandRequest
 	if err := ctx.ShouldBind(&request); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": fmt.Sprintf("bad-request: %s", err.Error())})
