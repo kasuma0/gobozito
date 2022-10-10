@@ -15,6 +15,7 @@ type Configuration struct {
 	DiscordApiURL    string
 	DiscordPublicKey string
 	DiscordEpoch     int
+	JWTSecret        string
 	Credentials      struct {
 		MongoDB struct {
 			URL             string
@@ -45,6 +46,7 @@ func init() {
 		BotID:            os.Getenv("BOTID"),
 		DiscordApiURL:    fmt.Sprintf("https://discord.com/api/v%s", os.Getenv("DISCORDVERSION")),
 		DiscordPublicKey: os.Getenv("DISCORDPUBLICKEY"),
+		JWTSecret:        os.Getenv("JWTSECRET"),
 		DiscordEpoch:     1420070400000,
 		Credentials: struct {
 			MongoDB struct {
