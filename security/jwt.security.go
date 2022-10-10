@@ -18,12 +18,12 @@ import (
 )
 
 func GenerateJWT(user string) (string, error) {
-	iss, err := encrypt(conf.DiscordConfiguration.BotID)
+	iss, err := Encrypt(conf.DiscordConfiguration.BotID)
 	if err != nil {
 		logrus.Error(err)
 		return "", err
 	}
-	userEnc, err := encrypt(user)
+	userEnc, err := Encrypt(user)
 	if err != nil {
 		logrus.Error(err)
 		return "", err
@@ -46,7 +46,7 @@ func GenerateJWT(user string) (string, error) {
 	return strToken, nil
 }
 
-func encrypt(str string) (string, error) {
+func Encrypt(str string) (string, error) {
 	key, err := scrypt.Key([]byte(conf.DiscordConfiguration.JWTSecret), nil, 32768, 8, 1, 32)
 	if err != nil {
 		logrus.Error(err)
@@ -76,7 +76,7 @@ func encrypt(str string) (string, error) {
 	mode.CryptBlocks(cipherText[aes.BlockSize:], text)
 	return hex.EncodeToString(cipherText), nil
 }
-func decrytp(encryptedText string) (string, error) {
+func Decrytp(encryptedText string) (string, error) {
 	key, err := scrypt.Key([]byte(conf.DiscordConfiguration.JWTSecret), nil, 32768, 8, 1, 32)
 	if err != nil {
 		logrus.Error(err)
