@@ -3,7 +3,6 @@ package middleware
 import (
 	"bytes"
 	"encoding/hex"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/kasuma0/gobozito/conf"
 	"github.com/sirupsen/logrus"
@@ -16,6 +15,7 @@ func RequestValidation() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if !verifySignature(ctx) {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "unauthorized"})
+			return
 		}
 		ctx.Next()
 	}
@@ -42,7 +42,6 @@ func verifySignature(ctx *gin.Context) bool {
 		logrus.Error(err)
 		return false
 	}
-	fmt.Println(xSignatureTimestamp)
 	if len(signature) != ed25519.SignatureSize || signature[63]&224 != 0 {
 		return false
 	}
